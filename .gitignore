@@ -1,0 +1,5 @@
+# Archivos temporales y configuración local
+work/
+.DS_Store
+Thumbs.db
+*.log

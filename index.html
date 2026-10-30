@@ -49,14 +49,16 @@
       {min:16,name:'Selva tropical',tag:'16–23 árboles',short:'Selva húmeda',species:'Ceiba · Ceiba pentandra',leaf:'#23824b',trunk:'#80603a',text:'Las selvas del sureste son vitales para el clima, la fauna y las comunidades que las protegen.',fact:'Dato: la ceiba puede alcanzar más de 60 metros de altura y es un árbol sagrado para pueblos mayas.',tip:'Al elegir madera o papel, busca certificaciones de manejo forestal responsable.'},
       {min:24,name:'Matorral xerófilo',tag:'24+ árboles',short:'Zonas áridas',species:'Cardón · Pachycereus pringlei',leaf:'#478e58',trunk:'#8c6847',text:'En los desiertos mexicanos, cada planta aprovecha al máximo el agua y crea hogar para especies únicas.',fact:'Dato: México es uno de los países con mayor diversidad de cactáceas del mundo.',tip:'En zonas secas, usa acolchado orgánico alrededor de los árboles para conservar la humedad.'}
     ];
-    let score=0, tilt=0, running=true, timer, best=+localStorage.cimasBest||0;
+    // Modelo de equilibrio: fuerza externa + restauración + amortiguamiento.
+    // Está inspirado en los principios de movimiento angular de Nature of Code.
+    let score=0, tilt=0, angularVelocity=0, running=true, timer, best=+localStorage.cimasBest||0;
     const $=s=>document.querySelector(s), tower=$('#tower');
     function eco(){return [...ecosystems].reverse().find(e=>score>=e.min)}
     function renderTree(){ const e=eco(), tree=document.createElement('div'); tree.className='tree'+(score>=24?' cactus':''); tree.style.setProperty('--w',(120+(score%3)*19)+'px'); tree.style.setProperty('--b',(score*27)+'px'); tree.style.setProperty('--leaf',e.leaf); tree.style.setProperty('--trunk',e.trunk); tree.innerHTML='<i class="crown"></i><i class="trunk"></i>'; tower.append(tree); }
     function updateInfo(){const e=eco(); $('#score').textContent=score; $('#best').textContent='Mejor: '+best; $('#ecosystem').textContent=e.short; $('#species').textContent=e.species; $('#ecoTitle').textContent=e.name; $('#ecoRange').textContent=e.tag; $('#ecoText').textContent=e.text; $('#fact').textContent=e.fact; $('#tipText').textContent=e.tip;}
-    function start(){score=0;tilt=0;running=true;tower.innerHTML='';renderTree(); updateInfo(); $('#modal').classList.remove('show'); clearInterval(timer); timer=setInterval(tick,1300); $('#status').textContent='Mantén el equilibrio';}
-    function tick(){ if(!running)return; score++; const drift=(Math.random()-.5)*(1.1+score*.055); tilt+=drift; renderTree(); updateInfo(); $('#status').textContent='¡Sigue subiendo!'; check(); }
-    function move(n){if(!running)return; tilt+=n; check();}
+    function start(){score=0;tilt=0;angularVelocity=0;running=true;tower.innerHTML='';renderTree(); updateInfo(); $('#modal').classList.remove('show'); clearInterval(timer); timer=setInterval(tick,1300); $('#status').textContent='Mantén el equilibrio';}
+    function tick(){ if(!running)return; score++; const wind=(Math.random()-.5)*(.62+score*.032); const restoringForce=-tilt*.018; angularVelocity=(angularVelocity+wind+restoringForce)*.91; tilt+=angularVelocity; renderTree(); updateInfo(); $('#status').textContent='¡Sigue subiendo!'; check(); }
+    function move(n){if(!running)return; angularVelocity+=n*.22; tilt+=n*.18; check();}
     function check(){tower.style.transform=`translateX(-50%) rotate(${tilt}deg)`; const pct=Math.min(100,Math.abs(tilt)/22*100); $('#balanceBar').style.width=pct+'%'; $('#balanceBar').style.background=pct>72?'#c65b45':pct>45?'#e5a53a':'#39784d'; if(Math.abs(tilt)>22) end();}
     function end(){running=false; clearInterval(timer); $('#status').textContent='¡La torre perdió el equilibrio!'; $('#finalScore').textContent=score; if(score>best){best=score;localStorage.cimasBest=best;} updateInfo(); $('#modal').classList.add('show');}
     function rankings(){let list=JSON.parse(localStorage.cimasRankings||'[]'); if(!list.length)list=[{n:'Amapola',s:18},{n:'Jaguar',s:12},{n:'Nopal',s:8}]; $('#rankingRows').innerHTML=list.sort((a,b)=>b.s-a.s).slice(0,6).map((r,i)=>`<div class="rank-row"><b>${i+1}</b><span>${r.n}</span><strong>${r.s}</strong></div>`).join('');}

@@ -22,6 +22,7 @@ https://marga222.github.io/cimas-vivas-mexico/
 3. La aparición del viento usa valores aleatorios con `Math.random()` para que cada partida sea distinta.
 4. Se mejoró el equilibrio con un modelo de movimiento angular inspirado en *Nature of Code*: fuerza de viento, fuerza restauradora y amortiguamiento generan un comportamiento gradual de la torre.
 5. El ranking se conserva localmente en el navegador para promover la competencia entre jugadores del mismo dispositivo.
+6. Se renovó la interfaz con nubes animadas, destellos ambientales, indicador de racha, pausa y el poder **Calma del bosque**, que reduce temporalmente el viento y se recarga durante la partida.
 
 ## Ejecución
 

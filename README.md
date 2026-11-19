@@ -23,6 +23,7 @@ https://marga222.github.io/cimas-vivas-mexico/
 4. Se mejoró el equilibrio con un modelo de movimiento angular inspirado en *Nature of Code*: fuerza de viento, fuerza restauradora y amortiguamiento generan un comportamiento gradual de la torre.
 5. El ranking se conserva localmente en el navegador para promover la competencia entre jugadores del mismo dispositivo.
 6. Se renovó la interfaz con nubes animadas, destellos ambientales, indicador de racha, pausa y el poder **Calma del bosque**, que reduce temporalmente el viento y se recarga durante la partida.
+7. Se agregó un fondo generativo que responde suavemente al movimiento del cursor, selector de dificultad (Fácil, Medio y Difícil) y el poder **Raíz firme**. Este último estabiliza la torre por unos segundos, pero activa una tormenta de polen más fuerte al terminar, por lo que requiere usarlo estratégicamente.
 
 ## Ejecución
 
